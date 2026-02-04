@@ -21,7 +21,7 @@
 # ==========================================================================
 services:
   ryzen-ai-npu:
-    image: ryzen_ai_npu:latest
+    image: harbor.edgesync.cloud/amd/ryzen_ai_npu:latest
     container_name: ryzen-ai-npu
 
     privileged: true
