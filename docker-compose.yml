@@ -1,0 +1,112 @@
+# ==========================================================================
+# Ryzen AI / NPU Vision Applications Docker Compose File
+# ==========================================================================
+# Version:      1.0.0
+# Created:      February 2026
+# Last Updated: February 2026
+#
+# Description:
+#   Production-ready Docker Compose configuration for AMD Ryzen AI
+#   Vision / NPU applications with full hardware acceleration support.
+#
+# Features:
+#   - AMD Ryzen AI NPU acceleration (XRT / XDNA)
+#   - amdgpu / DRM device access
+#   - X11 display forwarding (optional)
+#   - Host IPC & networking for profiling / performance tools
+#
+# Usage:
+#   docker compose up
+#
+# ==========================================================================
+services:
+  ryzen-ai-npu:
+    image: ryzen_ai_npu:latest
+    container_name: ryzen-ai-npu
+
+    privileged: true
+    ipc: host
+    network_mode: host
+
+    tty: true
+    stdin_open: true
+    entrypoint: ["/bin/bash"]
+
+    security_opt:
+      - seccomp:unconfined
+
+    labels:
+      maintainer: "AMD Team"
+      vendor: "AMD Ryzen AI"
+      version: "1.0.0"
+      description: "Ryzen AI NPU Vision Runtime Environment"
+
+    environment:
+      # Display (optional)
+      - DISPLAY=${DISPLAY:-:0}
+      - XAUTHORITY=${XAUTHORITY:-/tmp/.docker.xauth}
+      - QT_X11_NO_MITSHM=1
+      - XDG_RUNTIME_DIR=/tmp
+
+      # AMD / ROCm / XRT
+      - HSA_ENABLE_SDMA=0
+      - ROCM_PATH=/opt/rocm
+      - XRT_PATH=/opt/xilinx/xrt
+
+      # Runtime
+      - LD_LIBRARY_PATH=/opt/xilinx/xrt/lib:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-}
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+
+    volumes:
+      # Application (RW)
+      - ./src:/workspace/src:rw
+      - ./models:/workspace/models:rw
+      - ./data:/workspace/data:rw
+      - ./results:/workspace/results:rw
+      - ./logs:/workspace/logs:rw
+
+      # XRT & firmware
+      - /opt/xilinx/xrt:/opt/xilinx/xrt:ro
+      - /lib/firmware:/lib/firmware:ro
+
+      # System & devices
+      - /sys:/sys:ro
+      - /dev:/dev
+      - /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:ro
+
+      # X11 (optional)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/tmp/.docker.xauth:rw
+      - /tmp:/tmp:rw
+
+    devices:
+      - /dev/dri
+      # Uncomment if required by your platform
+      # - /dev/kfd
+
+    shm_size: "6gb"
+
+    restart: unless-stopped
+
+    working_dir: /workspace
+
+    healthcheck:
+      test: ["CMD", "bash", "-c", "ls /opt/xilinx/xrt > /dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+# ==========================================================================
+# Notes:
+# ==========================================================================
+# 1. Ensure XRT is installed on host:
+#      /opt/xilinx/xrt
+#
+# 2. For X11 display support, run on host:
+#      xhost +local:docker
+#
+# 3. To enter container:
+#      docker exec -it ryzen-ai-npu bash
+# ==========================================================================
