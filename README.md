@@ -117,21 +117,19 @@ This confirms that:
 * XRT is correctly visible inside the container
 * The Ryzen AI runtime can execute workloads on the NPU
 
-
+---
 
 ## 6. Run YOLO Object Detection on the NPU
-
 After verifying the basic NPU functionality, you can run advanced applications like real-time object detection using YOLO models.
-
 Ensure you are still inside the container and the virtual environment is activated (steps 3-4). Then navigate to the appropriate directory:
 
 ```bash
 cd /workspace
 ```
-Run the YOLO object detection script with NPU acceleration:
+Run the YOLO object detection script with NPU acceleration. By default, the script uses the NPU. To force the use of the CPU, add the --cpu-only parameter. For performance comparison between NPU and CPU, add the --compare-performance parameter. To run in headless mode (no GUI display), add the --no-display parameter.
 
 ```bash
-python3 ./src/advantech-yolo-NPU.py \
+python3 ./src/advantech-yolo.py \
   --model ./models/yolo11n.onnx \
   --video-file ./data/test.mp4 \
   --save-video \
@@ -139,15 +137,62 @@ python3 ./src/advantech-yolo-NPU.py \
   --no-display
 ```
 
-Command Parameters Explained:
+To force CPU usage:
+
+```bash
+python3 ./src/advantech-yolo.py \
+  --model ./models/yolo11n.onnx \
+  --video-file ./data/test.mp4 \
+  --save-video \
+  --output ./results/test_out.mp4 \
+  --cpu-only \
+  --no-display
+```
+For performance comparison:
+
+```bash
+python3 ./src/advantech-yolo.py \
+  --model ./models/yolo11n.onnx \
+  --video-file ./data/test.mp4 \
+  --save-video \
+  --output ./results/test_out.mp4 \
+  --compare-performance \
+  --no-display
+```
+
+Command Parameters Explained: 
 Parameter	Description
---model ./models/yolo11n.onnx	Path to the YOLO model in ONNX format
---video-file ./data/test.mp4	Input video file for processing
---save-video	Save the processed output video
---output ./results/test_out.mp4	Output path for the processed video
---no-display	Run in headless mode (no GUI display)
+–model ./models/yolo11n.onnx	Path to the YOLO model in ONNX format
+–video-file ./data/test.mp4	Input video file for processing
+–save-video	Save the processed output video
+–output ./results/test_out.mp4	Output path for the processed video
+–cpu-only	Force the use of the CPU instead of the NPU
+–compare-performance	Compare performance between NPU and CPU
+–no-display	Run in headless mode (no GUI display)
 
 ---
+![Model Detection NPU Demo](data/detection_npu.gif)
+
+---
+
+## 7.Exporting Models
+
+Convert models to optimized formats for deployment.
+
+```bash
+ python3 advantech-coe-model-export.py --model yolov.pt --output ./ --format onnx
+```
+The export utility guides you through three selections (Task, Size, Format).
+
+**Task Selection:**
+
+| Option | Task | Input Size |
+|:-------|:-----|:-----------|
+| 1 | Object Detection | 640×640 |
+| 2 | Instance Segmentation | 640×640 |
+| 3 | Classification | 224×224 |
+
+![Model Export Menu Demo](data/export.gif)
 
 ## Notes & Troubleshooting
 
