@@ -162,13 +162,15 @@ python3 ./src/advantech-yolo.py \
 
 Command Parameters Explained: 
 Parameter	Description
-–model ./models/yolo11n.onnx	Path to the YOLO model in ONNX format
-–video-file ./data/test.mp4	Input video file for processing
-–save-video	Save the processed output video
-–output ./results/test_out.mp4	Output path for the processed video
-–cpu-only	Force the use of the CPU instead of the NPU
-–compare-performance	Compare performance between NPU and CPU
-–no-display	Run in headless mode (no GUI display)
+| Option                     | Task                     | Input Size |
+| :------------------------- | :----------------------- | :--------- |
+| `--model ./models/yolo11n.onnx` | Object Detection         | 640×640    |
+| `--video-file ./data/test.mp4`  | Video File Input         | N/A        |
+| `--save-video`             | Save Output Video        | N/A        |
+| `--output ./results/test_out.mp4` | Output Video Path        | N/A        |
+| `--cpu-only`               | Force CPU Usage          | N/A        |
+| `--compare-performance`    | Compare NPU and CPU      | N/A        |
+| `--no-display`             | Run in Headless Mode     | N/A        |
 
 ---
 ![Model Detection NPU Demo](data/detection_npu.gif)
@@ -193,6 +195,21 @@ The export utility guides you through three selections (Task, Size, Format).
 | 3 | Classification | 224×224 |
 
 ![Model Export Menu Demo](data/export.gif)
+
+---
+
+### 8. Verify Installation (Optional)
+ 
+Run the diagnostic script to confirm hardware acceleration is working.
+ 
+```bash
+./wise-bench.sh
+```
+
+The wise-bench script will run as below as per the system specifications.
+![wise-bench](data/wise_bench.gif)
+
+---
 
 ## Notes & Troubleshooting
 
