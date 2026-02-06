@@ -11,7 +11,6 @@
 #
 # Features:
 #   - AMD Ryzen AI NPU acceleration (XRT / XDNA)
-#   - amdgpu / DRM device access
 #   - X11 display forwarding (optional)
 #   - Host IPC & networking for profiling / performance tools
 #
@@ -34,61 +33,58 @@ services:
 
     security_opt:
       - seccomp:unconfined
-
+      
     labels:
       maintainer: "AMD Team"
       vendor: "AMD Ryzen AI"
       version: "1.0.0"
       description: "Ryzen AI NPU Vision Runtime Environment"
-
+      
     environment:
-      # Display (optional)
+      # ===== X11 Display =====
       - DISPLAY=${DISPLAY:-:0}
       - XAUTHORITY=${XAUTHORITY:-/tmp/.docker.xauth}
       - QT_X11_NO_MITSHM=1
       - XDG_RUNTIME_DIR=/tmp
 
-      # AMD / ROCm / XRT
-      - HSA_ENABLE_SDMA=0
-      - ROCM_PATH=/opt/rocm
+      # ===== AMD / XRT =====
       - XRT_PATH=/opt/xilinx/xrt
+      - ROCM_PATH=/opt/rocm
+      - HSA_ENABLE_SDMA=0
 
-      # Runtime
-      - LD_LIBRARY_PATH=/opt/xilinx/xrt/lib:/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH:-}
+      # ===== Runtime =====
+      - LD_LIBRARY_PATH=/opt/xilinx/xrt/lib:${LD_LIBRARY_PATH:-}
       - PYTHONUNBUFFERED=1
       - PYTHONDONTWRITEBYTECODE=1
 
     volumes:
-      # Application (RW)
+      # ===== Workspace =====
       - ./src:/workspace/src:rw
       - ./models:/workspace/models:rw
       - ./data:/workspace/data:rw
       - ./results:/workspace/results:rw
       - ./logs:/workspace/logs:rw
 
-      # XRT & firmware
+      # ===== XRT runtime (host provided) =====
       - /opt/xilinx/xrt:/opt/xilinx/xrt:ro
       - /lib/firmware:/lib/firmware:ro
 
-      # System & devices
-      - /sys:/sys:ro
+      # ===== Devices =====
       - /dev:/dev
-      - /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:ro
+      - /sys:/sys:ro
 
-      # X11 (optional)
+      # ===== X11 =====
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - ${XAUTHORITY:-$HOME/.Xauthority}:/tmp/.docker.xauth:rw
       - /tmp:/tmp:rw
 
     devices:
       - /dev/dri
-      # Uncomment if required by your platform
       # - /dev/kfd
 
     shm_size: "6gb"
 
     restart: unless-stopped
-
     working_dir: /workspace
 
     healthcheck:

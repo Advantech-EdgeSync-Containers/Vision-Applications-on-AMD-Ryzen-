@@ -12,9 +12,8 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 
-REGISTRY_IMAGE="harbor.edgesync.cloud/amd/ryzen_ai_npu"
-DIGEST="sha256:831f01996f91076b5d7388cb1c799a7e743ff01ebabfce351764ce1b1f3aaa6d"
-LOCAL_TAG="ryzen_ai_npu:latest"
+REGISTRY_IMAGE="harbor.edgesync.cloud/amd/ryzen_ai_npu_ubuntu24"
+LOCAL_TAG="ryzen-ai-npu:latest"
 
 log() { echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2; }
 log_error() { echo -e "${RED}[ERROR] $(date '+%Y-%m-%d %H:%M:%S') $*${NC}" >&2; }
@@ -28,18 +27,17 @@ display_banner() {
     clear
     echo -e "${BLUE}"
     cat << 'EOF'
-       █████╗ ██████╗ ██╗   ██╗ █████╗ ███╗   ██╗████████╗███████╗ ██████╗██╗  ██╗     ██████╗ ██████╗ ███████╗
-      ██╔══██╗██╔══██╗██║   ██║██╔══██╗████╗  ██║╚══██╔══╝██╔════╝██╔════╝██║  ██║    ██╔════╝██╔═══██╗██╔════╝
-      ███████║██║  ██║██║   ██║███████║██╔██╗ ██║   ██║   █████╗  ██║     ███████║    ██║     ██║   ██║█████╗  
-      ██╔══██║██║  ██║╚██╗ ██╔╝██╔══██║██║╚██╗██║   ██║   ██╔══╝  ██║     ██╔══██║    ██║     ██║   ██║██╔══╝  
-      ██║  ██║██████╔╝ ╚████╔╝ ██║  ██║██║ ╚████║   ██║   ███████╗╚██████╗██║  ██║    ╚██████╗╚██████╔╝███████╗
-      ╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝     ╚═════╝ ╚═════╝ ╚══════╝
+██████╗ ██╗   ██╗███████╗███████╗███╗   ██╗     █████╗ ██╗
+██╔══██╗██║   ██║██╔════╝██╔════╝████╗  ██║    ██╔══██╗██║
+██████╔╝██║   ██║█████╗  █████╗  ██╔██╗ ██║    ███████║██║
+██╔══██╗╚██╗ ██╔╝██╔══╝  ██╔══╝  ██║╚██╗██║    ██╔══██║██║
+██║  ██║ ╚████╔╝ ███████╗███████╗██║ ╚████║    ██║  ██║██║
+╚═╝  ╚═╝  ╚═══╝  ╚══════╝╚══════╝╚═╝  ╚═══╝    ╚═╝  ╚═╝╚═╝
 EOF
-    echo -e "${WHITE}                                  Center of Excellence${NC}"
-    echo
-    echo -e "${CYAN}Initializing AI Development Environment...${NC}\n"
-    sleep 2
+    echo -e "${CYAN}Initializing Ryzen AI / NPU Environment (Pull Mode)...${NC}\n"
+    sleep 1
 }
+
 # -----------------------------------------------------------------------------
 # Docker environment check
 # -----------------------------------------------------------------------------
@@ -115,9 +113,9 @@ check_host_runtime() {
 # Pull & tag image
 # -----------------------------------------------------------------------------
 pull_image() {
-    local src="${REGISTRY_IMAGE}@${DIGEST}"
+    local src="${REGISTRY_IMAGE}:latest"
 
-    log "Pulling image:"
+    log "Pulling latest image:"
     log "  ${src}"
 
     docker pull "${src}"
