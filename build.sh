@@ -13,7 +13,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 
 REGISTRY_IMAGE="harbor.edgesync.cloud/amd/ryzen_ai_npu_ubuntu24"
-LOCAL_TAG="ryzen-ai-npu:latest"
+LOCAL_TAG="ryzen_ai_npu:latest"
 
 log() { echo -e "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >&2; }
 log_error() { echo -e "${RED}[ERROR] $(date '+%Y-%m-%d %H:%M:%S') $*${NC}" >&2; }
