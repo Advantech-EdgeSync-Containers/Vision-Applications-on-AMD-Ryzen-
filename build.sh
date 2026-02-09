@@ -115,7 +115,7 @@ check_host_runtime() {
 # Pull & tag image
 # -----------------------------------------------------------------------------
 pull_image() {
-    local src="${REGISTRY_IMAGE}:latest"
+    local src="${REGISTRY_IMAGE}:v2.0"
 
     log "Pulling latest image:"
     log "  ${src}"
