@@ -1,4 +1,4 @@
-# Ryzen AI NPU Docker Environment – Quick Start
+# AMD Ryzen™ AI NPU Docker Environment – Quick Start
 
 This document describes how to install the AMD Ryzen AI NPU driver, start the Docker-based runtime environment, and verify that the NPU is working correctly.
 
@@ -231,3 +231,4 @@ The wise-bench script will run as below as per the system specifications.
 5. Run `quicktest.py` to verify NPU execution
 
 You are now ready to run Ryzen AI workloads inside Docker using the NPU.
+
