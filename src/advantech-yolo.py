@@ -845,8 +845,8 @@ class AdvantechPipeline:
                 device_text = "CPU"
                 color = (255, 0, 0)  # Red
             
-            cv2.putText(frame_display, f"Device: {device_text}", (10, frame_display.shape[0] - 20),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+            # cv2.putText(frame_display, f"Device: {device_text}", (10, frame_display.shape[0] - 20),
+            #            cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
             
 
             cv2.putText(frame_display, "Press 'p' for performance details", 
