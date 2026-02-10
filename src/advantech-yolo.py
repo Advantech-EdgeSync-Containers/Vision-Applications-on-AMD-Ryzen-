@@ -263,23 +263,30 @@ class AdvantechVideoSource:
         print("All camera opening methods failed")
         return False
     
-    def _try_open_direct(self, device: int, width: int, height: int, 
-                        pixel_format: str, fps: int) -> bool:
+    def _try_open_direct(self, device, width, height, pixel_format, fps):
         try:
-            self._cap = cv2.VideoCapture(device)
-            if self._cap.isOpened():
-                self._cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-                self._cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-                self._cap.set(cv2.CAP_PROP_FPS, fps)
-                ret, frame = self._cap.read()
-                if ret and frame is not None:
-                    return True
-                else:
-                    self._cap.release()
-                    self._cap = None
-        except:
-            pass
-        return False
+            cap = cv2.VideoCapture(device, cv2.CAP_V4L2)
+            if not cap.isOpened():
+                return False
+ 
+            # Must be set before read()
+            fourcc = cv2.VideoWriter_fourcc(*pixel_format[:4])
+            cap.set(cv2.CAP_PROP_FOURCC, fourcc)
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+            cap.set(cv2.CAP_PROP_FPS, fps)
+ 
+            # Force trigger format negotiation
+            ret, frame = cap.read()
+            if not ret:
+                cap.release()
+                return False
+ 
+            self._cap = cap
+            return True
+        except Exception as e:
+            print("direct open failed:", e)
+            return False
     
     def _try_open_v4l2(self, device: int, width: int, height: int,
                       pixel_format: str, fps: int) -> bool:
