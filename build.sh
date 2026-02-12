@@ -138,6 +138,21 @@ start_compose() {
 }
 
 # -----------------------------------------------------------------------------
+# Enable X11 display permissions
+# -----------------------------------------------------------------------------
+enable_x11() {
+    log "Enabling X11 display permissions..."
+    if ! command -v xhost &>/dev/null; then
+        log_error "xhost command not found - install x11-xserver-utils package"
+        exit 1
+    fi
+    
+    xhost +local:docker
+    log_success "X11 permissions granted to Docker containers"
+}
+
+
+# -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 main() {
@@ -146,6 +161,7 @@ main() {
     install_runtime_libs
     verify_boost
     check_host_runtime
+    enable_x11
     pull_image
     start_compose
     log_success "NPU runtime environment is ready"
