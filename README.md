@@ -180,15 +180,39 @@ Parameter	Description
 
 ---
 ![Model Detection NPU Demo](data/detection_npu.gif)
-
 ---
+
+## Detection
+
+```bash
+(ryzen-ai) root@amd-AIMB-RN:/workspace/src$ python3 advantech-yolo.py --model ../models/yolo11n.onnx  --input-source camera --camera-device 1 --task detection
+```
+
+![Model Detection NPU Demo](data/detection_webcam.gif)
+
+
+## Classification
+
+```bash
+(ryzen-ai) root@amd-AIMB-RN:/workspace/src$ python3 advantech-yolo.py --model ../models/yolo11n-cls.onnx  --input-source camera --camera-device 1 --task classification
+```
+![Model Classification NPU Demo](data/classification_webcam.gif)
+
+
+## Segmentation
+
+```bash
+(ryzen-ai) root@amd-AIMB-RN:/workspace/src$ python3 advantech-yolo.py --model ../models/yolo11n-seg.onnx  --input-source camera --camera-device 1 --task segmentation
+```
+
+![Model Segmentation NPU Demo](data/segmentation_webcam.gif)
 
 ## 8.Exporting Models
 
 Convert models to optimized formats for deployment.
 
 ```bash
- python3 advantech-coe-model-export.py --model yolov.pt --output ./ --format onnx
+(ryzen-ai) root@amd-AIMB-RN:/workspace/src$ python3 advantech-coe-model-export.py --model yolov.pt --output ./ --format onnx
 ```
 The export utility guides you through three selections (Task, Size, Format).
 
@@ -209,7 +233,7 @@ The export utility guides you through three selections (Task, Size, Format).
 Run the diagnostic script to confirm hardware acceleration is working.
  
 ```bash
-./wise-bench.sh
+(ryzen-ai) root@amd-AIMB-RN:/workspace/src$ ./wise-bench.sh
 ```
 
 The wise-bench script will run as below as per the system specifications.
