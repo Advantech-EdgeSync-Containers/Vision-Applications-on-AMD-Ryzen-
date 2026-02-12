@@ -1317,11 +1317,12 @@ class AdvantechOnnxEngine(AdvantechEngine):
         self.npu_available = npu_hardware_info['available'] and config.use_npu and not force_cpu
         self.npu_type = npu_hardware_info['type']
         
+        
         sess_options = ort.SessionOptions()
+        sess_options.add_session_config_entry('ep.context_enable', '0')  
         sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
         sess_options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
         sess_options.intra_op_num_threads = 0
-        
 
         if force_cpu or not config.use_npu:
             self.logger.info(f"CPU-only mode {'forced' if force_cpu else 'enabled (by user request)'}")
@@ -1330,12 +1331,8 @@ class AdvantechOnnxEngine(AdvantechEngine):
         else:
             self.device_type = "NPU (if available)"
         
-
         target_list = [
-            'RyzenAI_pso3',      
-            'X1',                
             'VAIML',             
-            'RyzenAI_pso3_v0',   
         ]
         
 
@@ -2002,20 +1999,25 @@ class AdvantechOverlayRenderer:
         height, width = output.shape[:2]
         
         # Render segmentation masks (if any)
+        
         if self.config.task_type == AdvantechTaskType.SEGMENTATION:
             for det in detections:
                 if det.mask is not None and np.any(det.mask > 0):
                     color = self._get_color(det.class_id)
                     mask_resized = cv2.resize(det.mask.astype(np.uint8), 
                                              (output.shape[1], output.shape[0]),
-                                             interpolation=cv2.INTER_NEAREST)
-                    
-                    # Create colored overlay for mask
-                    colored_mask = np.zeros_like(output)
-                    colored_mask[mask_resized > 0] = color
-                    
-                    # Blend mask with original frame
-                    output = cv2.addWeighted(output, 0.7, colored_mask, 0.3, 0)
+                                             interpolation=cv2.INTER_NEAREST)                    
+                   
+                    mask_3ch = cv2.merge([mask_resized, mask_resized, mask_resized])
+                    mask_3ch = mask_3ch.astype(float) / 255.0                    
+              
+                    colored_mask = np.zeros_like(output, dtype=float)
+                    colored_mask[:] = color
+                                                        
+                    mask_area = mask_3ch > 0
+                    output = output.astype(float)
+                    output[mask_area] = output[mask_area] * 0.7 + colored_mask[mask_area] * 0.3
+                    output = np.clip(output, 0, 255).astype(np.uint8)
         
         # Render bounding boxes for detection and segmentation
         if self.config.task_type in [AdvantechTaskType.DETECTION, AdvantechTaskType.SEGMENTATION]:
