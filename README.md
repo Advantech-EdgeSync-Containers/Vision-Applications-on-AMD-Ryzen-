@@ -57,7 +57,13 @@ ryzen-ai-npu
 
 ---
 
-## 3. Enter the Docker Container
+## 3. For X11 display support, run on host:
+```bash
+xhost +local:docker
+```
+---
+
+## 4. Enter the Docker Container
 
 Enter the running container using:
 
@@ -67,13 +73,13 @@ docker exec -it ryzen-ai-npu bash
 
 You should now be inside the container shell, for example:
 
-```text
+```bash
 root@<host>:/workspace#
 ```
 
 ---
 
-## 4. Activate the Python Virtual Environment
+## 5. Activate the Python Virtual Environment
 
 Inside the container, activate the Ryzen AI Python virtual environment:
 
@@ -83,7 +89,7 @@ source /home/ryzen_ai_1.6/venv/bin/activate
 
 After activation, the shell prompt should change to:
 
-```text
+```bash
 (ryzen-ai) root@<host>:/workspace#
 ```
 
@@ -93,7 +99,7 @@ After activation, the shell prompt should change to:
 
 ---
 
-## 5. Run the NPU Verification Test
+## 6. Run the NPU Verification Test
 
 Run the built-in quick test to verify NPU functionality:
 
@@ -119,7 +125,7 @@ This confirms that:
 
 ---
 
-## 6. Run YOLO Object Detection on the NPU
+## 7. Run YOLO Object Detection on the NPU
 After verifying the basic NPU functionality, you can run advanced applications like real-time object detection using YOLO models.
 Ensure you are still inside the container and the virtual environment is activated (steps 3-4). Then navigate to the appropriate directory:
 
@@ -177,7 +183,7 @@ Parameter	Description
 
 ---
 
-## 7.Exporting Models
+## 8.Exporting Models
 
 Convert models to optimized formats for deployment.
 
@@ -198,7 +204,7 @@ The export utility guides you through three selections (Task, Size, Format).
 
 ---
 
-### 8. Verify Installation (Optional)
+### 9. Verify Installation (Optional)
  
 Run the diagnostic script to confirm hardware acceleration is working.
  

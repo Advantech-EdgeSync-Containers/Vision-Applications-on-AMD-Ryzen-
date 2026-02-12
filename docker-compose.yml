@@ -64,6 +64,7 @@ services:
       - ./data:/workspace/data:rw
       - ./results:/workspace/results:rw
       - ./logs:/workspace/logs:rw
+      - /home/amd/docker_work:/work:rw
 
       # ===== XRT runtime (host provided) =====
       - /opt/xilinx/xrt:/opt/xilinx/xrt:ro

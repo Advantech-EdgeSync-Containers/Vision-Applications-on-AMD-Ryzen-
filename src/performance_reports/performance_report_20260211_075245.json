@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-02-11T07:52:45.924148",
+  "device_type": "AMD NPU",
+  "model_name": "yolo11n-seg",
+  "total_frames": 26,
+  "total_time_seconds": 3.466129784000259,
+  "avg_fps": 8.153683729324635,
+  "avg_latency_ms": 122.6439525000842,
+  "memory_usage_mb": 578.265625,
+  "cpu_usage_percent": 0.0,
+  "performance_history": [
+    {
+      "timestamp": 3810.304896847,
+      "fps": 7.56173571171845,
+      "latency_ms": 63.235520999721004,
+      "memory_mb": 533.78515625
+    },
+    {
+      "timestamp": 3811.305480598,
+      "fps": 7.061940364562874,
+      "latency_ms": 139.99004800000745,
+      "memory_mb": 581.61328125
+    },
+    {
+      "timestamp": 3812.388866829,
+      "fps": 7.670756573289635,
+      "latency_ms": 118.0220353333223,
+      "memory_mb": 587.640625
+    },
+    {
+      "timestamp": 3813.49457136,
+      "fps": 7.827016026726986,
+      "latency_ms": 121.63969300010851,
+      "memory_mb": 589.40234375
+    }
+  ]
+}

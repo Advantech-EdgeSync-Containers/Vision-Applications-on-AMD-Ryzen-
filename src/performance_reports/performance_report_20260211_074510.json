@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-02-11T07:45:10.244136",
+  "device_type": "CPU",
+  "model_name": "yolo11n-cls",
+  "total_frames": 80,
+  "total_time_seconds": 2.709546274999866,
+  "avg_fps": 174.26112052881425,
+  "avg_latency_ms": 5.738514689710428,
+  "memory_usage_mb": 320.44140625,
+  "cpu_usage_percent": 0.0,
+  "performance_history": [
+    {
+      "timestamp": 3355.286537829,
+      "fps": 26.797695966285893,
+      "latency_ms": 6.5168018332618285,
+      "memory_mb": 294.078125
+    },
+    {
+      "timestamp": 3356.291414582,
+      "fps": 29.747719988871758,
+      "latency_ms": 6.3410868666475535,
+      "memory_mb": 320.44140625
+    },
+    {
+      "timestamp": 3357.291951726,
+      "fps": 29.863506922513753,
+      "latency_ms": 5.4015378666311635,
+      "memory_mb": 320.44140625
+    }
+  ]
+}

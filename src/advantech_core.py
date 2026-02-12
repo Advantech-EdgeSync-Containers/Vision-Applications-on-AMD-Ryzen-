@@ -1319,7 +1319,8 @@ class AdvantechOnnxEngine(AdvantechEngine):
         
         
         sess_options = ort.SessionOptions()
-        sess_options.add_session_config_entry('ep.context_enable', '0')  
+
+        sess_options.add_session_config_entry('ep.context_enable', '0')
         sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
         sess_options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
         sess_options.intra_op_num_threads = 0
@@ -1331,11 +1332,11 @@ class AdvantechOnnxEngine(AdvantechEngine):
         else:
             self.device_type = "NPU (if available)"
         
-        target_list = [
-            'VAIML',             
+
+        target_list = [      
+            'VAIML',
         ]
         
-
         user_target = os.environ.get('VITIS_AI_TARGET', '')
         if user_target:
             target_list = [user_target] + target_list
